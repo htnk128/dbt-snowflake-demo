@@ -38,8 +38,8 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   jaffle_shop:
     mart:
-      +materialized: table      # テーブルとして保存
-      +database: shinee_sandboxmart   # Snowflakeのmartデータベースに保存
+      +materialized: table            # テーブルとして保存
+      +database: shinee_sandbox_mart  # Snowflakeのmartデータベースに保存
     staging:
-      +materialized: view       # ビューとして保存
-      +database: shinee_sandboxraw    # Snowflakeのrawデータベースに保存
+      +materialized: view             # ビューとして保存
+      +database: shinee_sandbox_raw   # Snowflakeのrawデータベースに保存
