@@ -1,0 +1,9 @@
+default:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      role: 'ACCOUNTADMIN'
+      warehouse: 'SHINEE_SANDBOX_WH'
+      database: 'SHINEE_SANDBOX_RAW'
+      schema: 'JAFFLE_SHOP'
