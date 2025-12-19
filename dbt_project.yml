@@ -36,7 +36,7 @@ clean-targets:         # directories to be removed by `dbt clean`
 # using the `{{ config(...) }}` macro.
 
 models:
-  jaffle_shop:
+  dbt_snowflake_demo:
     mart:
       +materialized: table            # テーブルとして保存
       +database: shinee_sandbox_mart  # Snowflakeのmartデータベースに保存
