@@ -39,7 +39,7 @@ models:
   jaffle_shop:
     mart:
       +materialized: table      # テーブルとして保存
-      +database: mart           # Snowflakeのmartデータベースに保存
+      +database: sandbox_mart   # Snowflakeのmartデータベースに保存
     staging:
       +materialized: view       # ビューとして保存
-      +database: raw            # Snowflakeのrawデータベースに保存
+      +database: sandbox_raw    # Snowflakeのrawデータベースに保存
