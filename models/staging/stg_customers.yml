@@ -1,0 +1,11 @@
+models:
+  - name: stg_customers
+    description: 基本的なクリーニングと変換が適用された顧客データ。顧客ごとに1行。
+    columns:
+      - name: customer_id
+        description: 各顧客を一意に識別するキー。
+        data_tests:
+          - not_null
+          - unique
+      - name: customer_name
+        description: 顧客の氏名。

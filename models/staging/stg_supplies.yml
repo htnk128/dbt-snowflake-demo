@@ -1,0 +1,22 @@
+models:
+  - name: stg_supplies
+    description: >
+      基本的なクリーニングと変換が適用された、資材費データの一覧。
+
+      資材ごとではなく、資材コストごとに1行。資材コストは変動するたびに新しいUUIDを持つ新しい行として記録されるため、同じsupply_idに対して複数行が存在する場合がある。
+    columns:
+      - name: supply_uuid
+        description: 資材コストごとに一意となるキー。
+        data_tests:
+          - not_null
+          - unique
+      - name: supply_id
+        description: 資材を識別するID。
+      - name: product_id
+        description: この資材が使用される商品を参照する外部キー。
+      - name: supply_name
+        description: 資材の名称。
+      - name: supply_cost
+        description: 資材のコスト(USD)。
+      - name: is_perishable_supply
+        description: この資材が傷みやすい(要冷蔵・要早期消費)ものかを示すブール値。

@@ -1,0 +1,21 @@
+models:
+  - name: products
+    description: 商品(注文可能なフード・ドリンク)データマート。商品ごとに1行。
+    columns:
+      - name: product_id
+        description: 各商品を一意に識別するキー。
+        data_tests:
+          - not_null
+          - unique
+      - name: product_name
+        description: 商品の名称。
+      - name: product_type
+        description: "商品の種別(例: jaffle, beverage)。"
+      - name: product_description
+        description: 商品の説明文。
+      - name: product_price
+        description: 商品の価格(USD)。
+      - name: is_food_item
+        description: この商品がフード商品かを示すブール値。
+      - name: is_drink_item
+        description: この商品がドリンク商品かを示すブール値。

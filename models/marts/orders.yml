@@ -1,0 +1,74 @@
+models:
+  - name: orders
+    description: 注文ごとの主要な情報(初回注文かどうか、フード/ドリンクの内訳を含む)を提供する、注文概要データマート。注文ごとに1行。
+    data_tests:
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "order_items_subtotal = subtotal"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "order_total = subtotal + tax_paid"
+    columns:
+      - name: order_id
+        description: ordersマートを一意に識別するキー。
+        data_tests:
+          - not_null
+          - unique
+      - name: location_id
+        description: 注文が行われた店舗を参照する外部キー。
+      - name: customer_id
+        description: 注文した顧客を参照する外部キー。
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('stg_customers')
+                field: customer_id
+      - name: subtotal_cents
+        description: 税抜小計(セント単位)。
+      - name: tax_paid_cents
+        description: 支払われた税額(セント単位)。
+      - name: order_total_cents
+        description: 注文合計金額(セント単位)。
+      - name: subtotal
+        description: 税抜小計(USD)。
+      - name: tax_paid
+        description: 支払われた税額(USD)。
+      - name: order_total
+        description: 税込の注文合計金額(USD)。
+      - name: order_date
+        description: 注文が行われた日付。
+      - name: order_cost
+        description: 注文を履行するための資材費の合計。
+      - name: order_items_subtotal
+        description: 注文内商品の価格小計の合計(USD)。
+      - name: count_food_items
+        description: 注文に含まれるフード商品の数。
+      - name: count_drink_items
+        description: 注文に含まれるドリンク商品の数。
+      - name: count_order_items
+        description: 注文に含まれる商品の総数。
+      - name: is_food_order
+        description: この注文にフード商品が含まれているかを示すブール値。
+      - name: is_drink_order
+        description: この注文にドリンク商品が含まれているかを示すブール値。
+      - name: customer_order_number
+        description: その顧客にとって何回目の注文かを示す連番。
+
+unit_tests:
+  - name: test_order_items_compute_to_bools_correctly
+    description: "ドリンク注文数とフード注文数のカウントが正しくブール値に変換されることをテストする。"
+    model: orders
+    given:
+      - input: ref('order_items')
+        rows:
+          - {order_id: 1, order_item_id: 1, is_drink_item: false, is_food_item: true}
+          - {order_id: 1, order_item_id: 2, is_drink_item: true, is_food_item: false}
+          - {order_id: 2, order_item_id: 3, is_drink_item: false, is_food_item: true}
+      - input: ref('stg_orders')
+        rows:
+          - {order_id: 1}
+          - {order_id: 2}
+    expect:
+      rows:
+        - {order_id: 1, count_food_items: 1, count_drink_items: 1, is_drink_order: true, is_food_order: true}
+        - {order_id: 2, count_food_items: 1, count_drink_items: 0, is_drink_order: false, is_food_order: true}

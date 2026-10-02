@@ -1,0 +1,33 @@
+models:
+  - name: customers
+    description: 顧客ごとの主要な情報を提供する、顧客概要データマート。顧客ごとに1行。
+    data_tests:
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "lifetime_spend_pretax + lifetime_tax_paid = lifetime_spend"
+    columns:
+      - name: customer_id
+        description: ordersマートを一意に識別するキー。
+        data_tests:
+          - not_null
+          - unique
+      - name: customer_name
+        description: 顧客の氏名。
+      - name: count_lifetime_orders
+        description: 顧客がこれまでに行った注文の総数。
+      - name: first_order_date
+        description: 顧客が最初に注文した日付。
+      - name: last_order_date
+        description: 顧客が最後に注文した日付。
+      - name: lifetime_spend_pretax
+        description: 顧客が行った全注文の税抜小計の合計。
+      - name: lifetime_tax_paid
+        description: 顧客が行った全注文の税額部分の合計。
+      - name: lifetime_spend
+        description: 顧客がこれまでに行った全注文の合計金額(税込)。
+      - name: customer_type
+        description: "'new'(新規)または'returning'(リピーター)のいずれか。顧客が2回以上注文したか、現時点で初回注文のみかを示す。"
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ["new", "returning"]

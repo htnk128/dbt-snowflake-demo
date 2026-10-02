@@ -1,0 +1,15 @@
+models:
+  - name: locations
+    description: 営業中の店舗データマート。店舗ごとに1行。
+    columns:
+      - name: location_id
+        description: 各店舗を一意に識別するキー。
+        data_tests:
+          - not_null
+          - unique
+      - name: location_name
+        description: 店舗の名称。
+      - name: tax_rate
+        description: 店舗に適用される税率。
+      - name: opened_date
+        description: 店舗が開店した日付。

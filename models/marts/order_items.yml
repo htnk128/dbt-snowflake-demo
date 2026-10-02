@@ -1,0 +1,58 @@
+models:
+  - name: order_items
+    description: 注文商品ごとの詳細(商品情報・資材コストを含む)を提供するデータマート。注文商品ごとに1行。
+    columns:
+      - name: order_item_id
+        description: 各注文商品を一意に識別するキー。
+        data_tests:
+          - not_null
+          - unique
+      - name: order_id
+        description: この注文商品が属する注文を参照する外部キー。
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('orders')
+                field: order_id
+      - name: product_id
+        description: 注文された商品を参照する外部キー。
+      - name: order_date
+        description: 注文が行われた日付。
+      - name: product_name
+        description: 商品の名称。
+      - name: product_price
+        description: 商品の価格(USD)。
+      - name: is_food_item
+        description: この商品がフード商品かを示すブール値。
+      - name: is_drink_item
+        description: この商品がドリンク商品かを示すブール値。
+      - name: supply_cost
+        description: この商品を提供するための資材コストの合計(USD)。
+unit_tests:
+  - name: test_supply_costs_sum_correctly
+    description: "同一商品の資材コストが正しく合計されることをテストする。"
+    model: order_items
+    given:
+      - input: ref('stg_supplies')
+        rows:
+          - {product_id: 1, supply_cost: 4.50}
+          - {product_id: 2, supply_cost: 3.50}
+          - {product_id: 2, supply_cost: 5.00}
+      - input: ref('stg_products')
+        rows:
+          - {product_id: 1}
+          - {product_id: 2}
+      - input: ref('stg_order_items')
+        rows:
+          - {order_id: 1, product_id: 1}
+          - {order_id: 2, product_id: 2}
+          - {order_id: 2, product_id: 2}
+      - input: ref('stg_orders')
+        rows:
+          - {order_id: 1}
+          - {order_id: 2}
+    expect:
+      rows:
+        - {order_id: 1, product_id: 1, supply_cost: 4.50}
+        - {order_id: 2, product_id: 2, supply_cost: 8.50}
+        - {order_id: 2, product_id: 2, supply_cost: 8.50}
