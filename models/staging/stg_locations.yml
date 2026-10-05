@@ -1,0 +1,49 @@
+models:
+  - name: stg_locations
+    description: 基本的なクリーニングと変換が適用された、営業中の店舗一覧。店舗ごとに1行。
+    columns:
+      - name: location_id
+        description: 各店舗を一意に識別するキー。
+        data_tests:
+          - not_null
+          - unique
+      - name: location_name
+        description: 店舗の名称。
+      - name: tax_rate
+        description: 店舗に適用される税率。
+      - name: opened_date
+        description: 店舗が開店した日付。
+
+unit_tests:
+  - name: test_does_location_opened_at_trunc_to_date
+    description: "opened_atタイムスタンプが日付へ正しく切り詰められることを確認する。"
+    model: stg_locations
+    given:
+      - input: ref('raw_stores')
+        rows:
+          - {
+              id: 1,
+              name: "Vice City",
+              tax_rate: 0.2,
+              opened_at: "2016-09-01T00:00:00",
+            }
+          - {
+              id: 2,
+              name: "San Andreas",
+              tax_rate: 0.1,
+              opened_at: "2079-10-27T23:59:59.9999",
+            }
+    expect:
+      rows:
+        - {
+            location_id: 1,
+            location_name: "Vice City",
+            tax_rate: 0.2,
+            opened_date: "2016-09-01",
+          }
+        - {
+            location_id: 2,
+            location_name: "San Andreas",
+            tax_rate: 0.1,
+            opened_date: "2079-10-27",
+          }

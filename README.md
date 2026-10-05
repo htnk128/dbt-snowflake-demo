@@ -1,66 +1,26 @@
-# dbt-snowflake-demo
+# 🥪 The Jaffle Shop 🦘
 
-## サンドボックス環境作成
-```
+_powered by the dbt Fusion engine_
+
+Welcome! This is a sandbox project for exploring the basic functionality of Fusion. It's based on a fictional restaurant called the Jaffle Shop that serves [jaffles](https://en.wikipedia.org/wiki/Pie_iron).
+
+To get started:
+1. Set up your database connection in `~/.dbt/profiles.yml`. If you got here by running `dbt init`, you should already be good to go.
+2. Run `dbt build`. That's it!
+
+> [!NOTE]
+> If you're brand-new to dbt, we recommend starting with the [dbt Learn](https://learn.getdbt.com/) platform. It's a free, interactive way to learn dbt, and it's a great way to get started if you're new to the tool.
+
+## Create a Demo Environment
 USE ROLE accountadmin;
 
--- ウェアハウス、データベース、スキーマの作成
-create warehouse if not exists SHINEE_SANDBOX_WH with warehouse_size = 'XSMALL';
-create database if not exists SHINEE_SANDBOX_RAW;
-create database if not exists SHINEE_SANDBOX_MART;
-create schema if not exists SHINEE_SANDBOX_RAW.jaffle_shop;
+create warehouse if not exists DEMO_DBT_WH with warehouse_size = 'XSMALL';
+create database if not exists DEMO_DBT;
+create schema if not exists DEMO_DBT.DEV;
+create schema if not exists DEMO_DBT.DEV_RAW;
 
-USE WAREHOUSE SHINEE_SANDBOX_WH;
-
---サンプルデータ用テーブル作成とサンプルデータ取込
-create table SHINEE_SANDBOX_RAW.jaffle_shop.customers
-( id integer,
-  first_name varchar,
-  last_name varchar
-);
-
-create table SHINEE_SANDBOX_RAW.jaffle_shop.orders
-( id integer,
-  user_id integer,
-  order_date date,
-  status varchar,
-  _etl_loaded_at timestamp default current_timestamp
-);
-
-copy into SHINEE_SANDBOX_RAW.jaffle_shop.customers (id, first_name, last_name)
-from 's3://dbt-tutorial-public/jaffle_shop_customers.csv'
-file_format = (
-    type = 'CSV'
-    field_delimiter = ','
-    skip_header = 1
-    ); 
-
-
-copy into SHINEE_SANDBOX_RAW.jaffle_shop.orders (id, user_id, order_date, status)
-from 's3://dbt-tutorial-public/jaffle_shop_orders.csv'
-file_format = (
-    type = 'CSV'
-    field_delimiter = ','
-    skip_header = 1
-    );
-
-
---データが正しく取り込まれているか確認
-select * from SHINEE_SANDBOX_RAW.jaffle_shop.customers;
-select * from SHINEE_SANDBOX_RAW.jaffle_shop.orders;
-```
-
-## サンドボックス環境削除
-```
+## Delete a Demo Environment
 USE ROLE accountadmin;
 
--- サンドボックス環境の削除
--- データベースを削除すると、その中のスキーマ・テーブル・データもすべて削除されます
-
--- ウェアハウスの削除
-drop warehouse if exists SHINEE_SANDBOX_WH;
-
--- データベースの削除（スキーマ・テーブルも含めて削除）
-drop database if exists SHINEE_SANDBOX_RAW;
-drop database if exists SHINEE_SANDBOX_MART;
-```
+drop warehouse if exists DEMO_DBT_WH;
+drop database if exists DEMO_DBT;

@@ -1,0 +1,23 @@
+version: 2
+
+# Try using these source definitions instead!
+sources:
+  - name: ecom
+    schema: "{{ target.schema }}_raw"
+    description: Jaffle Shopのeコマースデータ
+    tables:
+      - name: raw_customers
+        description: 1つ以上の商品を購入した人物ごとに1レコード
+      - name: raw_orders
+        description: 注文ごとに1レコード(1つ以上の注文商品で構成される)
+        config:
+          loaded_at_field: ordered_at
+      - name: raw_items
+        description: 注文に含まれる商品
+      - name: raw_stores
+        config:
+          loaded_at_field: opened_at
+      - name: raw_products
+        description: 店舗で販売される商品のSKUごとに1レコード
+      - name: raw_supplies
+        description: 店舗で販売される商品のSKUごとの資材ごとに1レコード

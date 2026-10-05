@@ -1,0 +1,19 @@
+models:
+  - name: stg_order_items
+    description: 注文を構成する個々のフード・ドリンク商品。商品ごとに1行。
+    columns:
+      - name: order_item_id
+        description: 各注文商品を一意に識別するキー。
+        data_tests:
+          - not_null
+          - unique
+      - name: order_id
+        description: 各注文商品が属する注文
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_orders')
+                field: order_id
+      - name: product_id
+        description: 注文された商品を参照する外部キー。

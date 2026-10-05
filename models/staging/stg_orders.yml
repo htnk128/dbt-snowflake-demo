@@ -1,0 +1,31 @@
+models:
+  - name: stg_orders
+    description: 基本的なクリーニングと変換が適用された注文データ。注文ごとに1行。
+    data_tests:
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "order_total - tax_paid = subtotal"
+    columns:
+      - name: order_id
+        description: 各注文を一意に識別するキー。
+        data_tests:
+          - not_null
+          - unique
+      - name: location_id
+        description: 注文が行われた店舗を参照する外部キー。
+      - name: customer_id
+        description: 注文した顧客を参照する外部キー。
+      - name: subtotal_cents
+        description: 税抜小計(セント単位)。
+      - name: tax_paid_cents
+        description: 支払われた税額(セント単位)。
+      - name: order_total_cents
+        description: 注文合計金額(セント単位)。
+      - name: subtotal
+        description: 税抜小計(USD)。
+      - name: tax_paid
+        description: 支払われた税額(USD)。
+      - name: order_total
+        description: 税込の注文合計金額(USD)。
+      - name: order_date
+        description: 注文が行われた日付。
