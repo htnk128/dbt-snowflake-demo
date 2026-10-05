@@ -2,7 +2,7 @@
 
 ## プロジェクト概要
 
-「Jaffle Shop」のeコマース売上分析基盤。dbt (profile: `dbt_snowflake_demo`) でステージング〜マートのデータパイプラインを構築する。
+「Jaffle Shop」の売上分析基盤。dbt (profile: `dbt_snowflake_demo`) でステージング〜マートのデータパイプラインを構築する。
 
 ## 接続情報
 
