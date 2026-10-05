@@ -12,15 +12,20 @@ To get started:
 > If you're brand-new to dbt, we recommend starting with the [dbt Learn](https://learn.getdbt.com/) platform. It's a free, interactive way to learn dbt, and it's a great way to get started if you're new to the tool.
 
 ## Create a Demo Environment
+```sql
 USE ROLE accountadmin;
 
 create warehouse if not exists DEMO_DBT_WH with warehouse_size = 'XSMALL';
 create database if not exists DEMO_DBT;
 create schema if not exists DEMO_DBT.DEV;
 create schema if not exists DEMO_DBT.DEV_RAW;
+```
 
 ## Delete a Demo Environment
+```sql
 USE ROLE accountadmin;
 
 drop warehouse if exists DEMO_DBT_WH;
+
 drop database if exists DEMO_DBT;
+```
